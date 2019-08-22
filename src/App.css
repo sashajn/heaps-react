@@ -20,13 +20,34 @@ body{
 
 .view{
 	min-height: 100vh;
-	display: none !important;
+	display: flex;
 }
 
-.active{
-	display: flex !important;
+
+/* header */
+.header{
+	display: flex;
+	justify-content: space-between;
+	padding: 1.5em;
+	box-sizing: border-box;
 }
 
+.header-profile{
+	justify-content: flex-end;
+}
+
+/* nav */
+.nav{
+	flex-direction: column;
+	align-items: flex-end;
+}
+
+.nav a{
+	text-decoration: none;
+	color: black;
+	font-size: 1.1em;
+	line-height: 2.5em;
+}
 
 /*layout in each view*/
 .view{
@@ -37,7 +58,7 @@ body{
 
 .footer{
 	text-align: center;
-	padding:1em;
+	padding: 1em;
 }
 
 .header-icon{
@@ -47,7 +68,7 @@ body{
 
 .main{
 	flex: 1 0 auto;
-	padding:1em;
+	padding: 1em;
 	margin-top: 2em;
 }
 
@@ -55,14 +76,6 @@ h3{
 	margin-bottom: 2em;
 	font-size: 1em; 
 	text-align: center;
-}
-
-/*nav*/
-
-.menu a{
-	display: block;
-	padding:1em;
-
 }
 
 /*header */

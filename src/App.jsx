@@ -1,50 +1,85 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import Harvest from './Harvest.jsx';
+import View from './View.jsx';
+import axios from 'axios';
 import './App.css';
+
+var urlPrefix = 'http://10.2.24.38:4001/api'
 
 class App extends Component {
   constructor(props){
     super(props);
+    this.state = {
+      activeView: 'harvests',
+      harvests: [
+        {
+          // name: 'test-name',
+          // description: 'test-description',  
+        }   
+      ],
+      types:[],
+
+    }
   }
+
+  setActiveView = (view) => {
+    this.setState({ activeView: view });
+  }
+
+  getHarvests = () => {
+    axios.get(urlPrefix+'/harvests')
+    .then(res => {
+      this.setState({ harvests: res.data });
+    })
+  }
+
+  componentDidMount(){
+    this.getHarvests ();
+  }
+  
+
+  
 
   render(){
     return (
 
       <div className="app">
 		
-      <div className="view color1 active">
-  
+      <View viewName="harvests" activeView={this.state.activeView} className="color1">
+        <div className="header header-profile">
+          <i onClick={()=>this.setActiveView('nav')} className="fas fa-bars"></i>
+        </div>
+
         <div className="user">
           <img className="dan" src="boy.png" alt=""/>
           <div className="user-info">
-              <h2 className="name">Dan</h2>
+              <h2 className="name"  >Dan</h2>
               <h2 className="location">Parnell</h2>
-  
-          </div>
-          
+          </div>         
         </div>
-
 
         <div className="main">
           <h3>Dan's harvests</h3>
-          <div className="card harvest">
-            <img className="card-img-top" src="plant.jpg" alt="Card image cap" />
-            <div className="card-body">
-              <h5 className="card-title">Card title</h5>
-              <h4 className="card-location">Location</h4>
-              <p className="card-text">Some quick example text to build on the card title</p>
-              <p>
-                <i className="fas fa-heart"></i>
-                <i className="fas fa-edit"></i>
-                <i className="fas fa-trash"></i>
-              </p>
-           
-            </div>
-          </div>
-  
+
+          {
+            this.state.harvests.map((harvest) => {
+              var harvestProps = {
+                ...harvest,
+                key: harvest.id,
+              };
+              return (<Harvest {...harvestProps} />)
+            })
+          }
+
+          
         </div>
-      </div>
-      <div className="view color2">
-        <div className="header"><i className="fas fa-times"></i></div>
+      </View>
+
+      <View viewName="add-harvest" activeView={this.state.activeView} className="color2">
+        <div className="header">
+          <i onClick={()=>this.setActiveView('harvests')} className="fas fa-times"></i>
+          <i onClick={()=>this.setActiveView('nav')} className="fas fa-bars"></i>
+        </div>
         <div className="main">
           <h3>Add a harvest</h3>
 
@@ -83,30 +118,33 @@ class App extends Component {
             </form>
 
         </div>
-      </div>
+      </View>
 
-      <div className="view color2">
-        <div className="header"><i className="fas fa-times"></i></div>
+      <View viewName="edit-harvest" activeView={this.state.activeView} className="color3">
+        <div className="header">
+          <i onClick={()=>this.setActiveView('harvests')} className="fas fa-times"></i>
+          <i onClick={()=>this.setActiveView('nav')} className="fas fa-bars"></i>
+        </div>
         <div className="main">
           <h3>Edit harvest</h3>
 
           <form>
             <div className="form-group">
-              <label for="name-input">Name</label>
+              <label or="name-input">Name</label>
               <input type="text" className="form-control" name="name-input" id="name-input" placeholder="Enter harvest name"/>
             </div>
             <div className="form-group">
-              <label for="name-input">Description</label>
+              <label or="name-input">Description</label>
               <input type="text" className="form-control" name="description-input" id="description-input" placeholder="Enter harvest description"/>
             </div>
   
             <div className="form-group">
-              <label for="name-input">Location/Pick up</label>
+              <label or="name-input">Location/Pick up</label>
               <input type="text" className="form-control" name="description-input" id="description-input" placeholder="Enter pick up location"/>
             </div>
             
             <div className="form-group">
-              <label for="name-input">Photo</label>
+              <label or="name-input">Photo</label>
               <input type="text" className="form-control" name="photo-input" id="photo-input" value="harvest.jpg"/>
             </div>
   
@@ -125,73 +163,22 @@ class App extends Component {
           </form>
             
         </div>
-      </div>
+      </View>
 
-      <div className="view color3">
-        <div className="header"><i className="fas fa-times"></i></div>
-        <div className="main">
-          <h2>Update harvests</h2>
-        
+      <View viewName="nav" activeView={this.state.activeView} className="color4">
+        <div class="header">
+          <i onClick={()=>this.setActiveView('harvests')} class="fas fa-times"></i>
+          <i class="fas fa-bars"></i>
         </div>
-      </div>
-      <div className="view color4">
-        <div className="header"><i className="fas fa-times"></i></div>
-        <div className="main">
-          <h3>Login</h3>
-          <form>
-            <div className="form-group">
-              <label for="name-input">Username</label>
-              <input type="text" className="form-control" nam="username-input" id="username-input" placeholder="Enter username"/>
-            </div>
-  
-            <div className="form-group">
-              <label for="name-input">Password</label>
-              <input type="password" className="form-control" name="password-input" id="password-input" placeholder="Enter password"/>
-            </div>
-            <button type="submit" className="btn btn-primary">Login</button>
-          </form>
-        </div>
-      </div>
-      <div className="view color5">
-        <div className="header"><i className="fas fa-times"></i></div>
-        <div className="main">
-          <h3>Signup</h3>
-          <form>
-            <div className="form-group">
-              <label for="name-input">Username</label>
-              <input type="text" className="form-control" name="username-input" id="username-input" placeholder="Enter username"/>
-            </div>
-  
-            <div className="form-group">
-              <label for="name-input">Password</label>
-              <input type="password" className="form-control" name="password-input" id="password-input" placeholder="Enter password"/>
-            </div>
-  
-            <div className="form-group">
-              <label for="name-input">Email</label>
-              <input type="email" className="form-control" name="email-input" id="email-input" placeholder="Enter email"/>
-            </div>
-  
-            <div className="form-group">
-              <label for="name-input">Intro</label>
-              <input type="text" className="form-control" name="intro-input" id="intro-input" placeholder="Enter introduction"/>
-            </div>
-  
-            <button type="submit" className="btn btn-primary">Join</button>
-          </form>
-        </div>
-      </div>
-      <div className="view color0">
-        <div className="header"><i className="fas fa-times"></i></div>
-        <div className="main">
-          <ul className="menu">
-            <li><a className="color1" href="">harvests</a></li>
-            <li><a className="color2" href="">Add a harvest</a></li>
-            <li><a className="color4" href="">Login</a></li>
-            <li><a className="color5" href="">Signup</a></li>
+        <div class="main">
+          <ul class="nav">
+            <li><a onClick={()=>this.setActiveView('add-harvest')} href="#">Add a Plant</a></li>
+            <li><a onClick={()=>this.setActiveView('edit-harvest')} href="#">Edit My Plants</a></li>
+            <li><a onClick={()=>this.setActiveView('harvests')} href="#">My Plant Profile</a></li>
+            <li><a href="#">Sign Out</a></li>
           </ul>
         </div>
-      </div>
+      </View>
   
       <div className="footer">
         <i><img className="add" src="plus.png" alt=""/></i>

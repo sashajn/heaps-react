@@ -33,6 +33,29 @@ class App extends Component {
     })
   }
 
+  addHarvests =(data)=>{
+    axios.post(urlPrefix + '/harvests',data)
+    .then(res => {
+      this.getHarvests();
+    }) 
+  }
+
+  deleteHarvests =(id)=>{
+    axios.delete(urlPrefix + '/harvests/'+ id)
+    .then(res =>{
+      this.getHarvests();
+    })
+
+  }
+
+  updateHarvests =(id,data)=>{
+    axios.put(urlPrefix + '/harvests/' + id,data)
+    .then(res =>{
+      this.getHarvests();
+    })
+
+  }
+
   componentDidMount(){
     this.getHarvests ();
   }
@@ -66,6 +89,7 @@ class App extends Component {
               var harvestProps = {
                 ...harvest,
                 key: harvest.id,
+                deleteHarvests:this.deleteHarvests
               };
               return (<Harvest {...harvestProps} />)
             })

@@ -19,6 +19,7 @@ class App extends Component {
         }   
       ],
       types:[],
+      currentType:null,
 
     }
   }
@@ -27,10 +28,27 @@ class App extends Component {
     this.setState({ activeView: view });
   }
 
+
+  setCurrentType =(id) =>{
+
+    var foundType = this.state.types.find((type)=>{
+      return type.id == id;
+    });
+    foundType ? this.setState({currentType:foundType}): this.setState({currentType:null})
+    ;
+  }
+
   getHarvests = () => {
     axios.get(urlPrefix+'/harvests')
     .then(res => {
       this.setState({ harvests: res.data });
+    })
+  }
+
+  getTypes =()=>{
+    axios.get (urlPrefix + '/types')
+    .then(res => {
+      this.setState({types:res.data});
     })
   }
 
@@ -60,12 +78,29 @@ class App extends Component {
 
   componentDidMount(){
     this.getHarvests ();
+    this.getTypes();
+  }
+
+  handleHarvestTypeClick =(e) =>{
+    var link = e.target;
+
+    this.setCurrentType(link.dataset.type);
+    this.setActiveView('harvests');
+
   }
   
 
-  
 
   render(){
+
+    var {currentType, harvests}=this.state;
+
+    if(currentType){
+      harvests = harvests.filter(harvest => {
+        return harvest.type_id == currentType.id
+      })
+
+    }
     return (
 
       <div className="app">
@@ -87,7 +122,7 @@ class App extends Component {
           <h3>Dan's harvests</h3>
 
           {
-            this.state.harvests.map((harvest) => {
+            harvests.map((harvest) => {
               var harvestProps = {
                 ...harvest,
                 key: harvest.id,
@@ -160,15 +195,23 @@ class App extends Component {
       </View>
 
       <View viewName="nav" activeView={this.state.activeView} className="color4">
-        <div class="header">
-          <i onClick={()=>this.setActiveView('harvests')} class="fas fa-times"></i>
-          <i class="fas fa-bars"></i>
+        <div className="header">
+          <i onClick={()=>this.setActiveView('harvests')} className="fas fa-times"></i>
+          <i className="fas fa-bars"></i>
         </div>
-        <div class="main">
-          <ul class="nav">
+        <div className="main">
+          <ul className="nav">
             <li><a onClick={()=>this.setActiveView('add-harvest')} href="#">Add a Plant</a></li>
+            
             <li><a onClick={()=>this.setActiveView('edit-harvest')} href="#">Edit My Plants</a></li>
-            <li><a onClick={()=>this.setActiveView('harvests')} href="#">My Plant Profile</a></li>
+            <li><a data-type = 'null' onClick ={this.handleHarvestTypeClick} href="#">Harvests</a></li>
+            {
+              this.state.types.map(type =>{
+                return (
+                <li><a data-type = {type.id} href="#" className="color1" onClick ={this.handleHarvestTypeClick}>{type.name}</a></li>
+                )
+              })
+            }
             <li><a href="#">Sign Out</a></li>
           </ul>
         </div>

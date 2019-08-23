@@ -7,8 +7,8 @@ class  AddHarvestForm extends Component {
       var data = {
         name: formData.get('name-input'),
         description:  formData.get('description-input'),
-        location: formData.get('location-input')
-        // type_id:  formData.get('type-input')
+        location: formData.get('location-input'),
+        type_id:  formData.get('type-input')
       }
       console.log(data);
       this.props.addHarvests(data);

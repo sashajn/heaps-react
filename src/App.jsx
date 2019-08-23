@@ -20,6 +20,7 @@ class App extends Component {
         }   
       ],
       types:[],
+      images: [],
       currentType:null,
       harvestToUpdate:null,
 
@@ -163,7 +164,7 @@ class App extends Component {
         <div className="main">
           <h3>Add a harvest</h3>
 
-          <AddHarvestForm addHarvests={this.addHarvests} setActiveView={this.setActiveView}/>
+          <AddHarvestForm addHarvests={this.addHarvests} types={this.state.types} setActiveView={this.setActiveView}/>
 
         </div>
       </View>
@@ -176,7 +177,7 @@ class App extends Component {
         <div className="main">
           <h3>Edit harvest</h3>
 
-          <EditHarvestForm {...this.state.harvestToUpdate}
+          <EditHarvestForm {...this.state.harvestToUpdate} types={this.state.types}
           updateHarvests={this.updateHarvests} setActiveView={this.setActiveView}/>
         </div>
       </View>

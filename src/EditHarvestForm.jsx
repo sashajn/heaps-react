@@ -14,6 +14,7 @@ import './App.css';
         var data = {
             name:formData.get('name-input'),
             description:formData.get('description-input'),
+            type_id:formData.get('type-input'),
         }
         var {updateHarvests,id,setActiveView} = this.props;
         updateHarvests(id,data);
@@ -21,7 +22,7 @@ import './App.css';
     }
      render()
      {
-        var {name,description} = this.props;
+        var {name,description, types, type_id} = this.props;
          return(
             <form onSubmit={this.handelFormSubmit} 
             ref={(el) =>{this.form = el}}>
@@ -37,21 +38,15 @@ import './App.css';
             <div className="form-group">
               <label or="name-input">Location/Pick up</label>
               <input type="text" className="form-control" name="description-input" id="description-input" placeholder="Enter pick up location"/>
-            </div>
-            
-            <div className="form-group">
-              <label or="name-input">Photo</label>
-              <input type="text" className="form-control" name="photo-input" id="photo-input" value="harvest.jpg"/>
-            </div>
+            </div>            
   
             <div className="form-group">
               <label for="type-input">Type</label>
-              <select className="form-control" name="type-input" id="type-input">
-                <option value="1">Fruit</option>
-                <option value="2">Veges</option>
-                <option value="3">Herbs</option>
-                <option value="4">Flowers</option>
-                <option value="5">Misc</option>
+              <select className="form-control" name="type-input" id="type-input" value={type_id}>
+
+                {types.map(type=><option value={type.id}>{type.name}</option>)}
+                
+         
               </select>
             </div>
   

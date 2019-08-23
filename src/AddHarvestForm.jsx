@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { types } from '@babel/core';
 
 class  AddHarvestForm extends Component {
     handleFormSubmit = (e) => {
@@ -15,6 +16,7 @@ class  AddHarvestForm extends Component {
       this.props.setActiveView('harvests');
     }
     render(){
+      var {types} = this.props;
       return (
         <form onSubmit={this.handleFormSubmit} ref={(el)=>{this.form = el}}>
         <div className="form-group">
@@ -30,20 +32,13 @@ class  AddHarvestForm extends Component {
           <label htmlFor="name-input">Location/Pick up</label>
           <input type="text" className="form-control" name="location-input" id="location-input" placeholder="Enter pick up location"/>
         </div>
-        
-        <div className="form-group">
-          <label htmlFor="name-input">Photo</label>
-          <input type="text" className="form-control" name="photo-input" id="photo-input" value="harvest.jpg"/>
-        </div>
 
         <div className="form-group">
           <label htmlFor="type-input">Type</label>
           <select className="form-control" name="type-input" id="type-input">
-            <option value="1">Fruit</option>
-            <option value="2">Veges</option>
-            <option value="3">Herbs</option>
-            <option value="4">Flowers</option>
-            <option value="5">Misc</option>
+            
+            {types.map(type=><option value={type.id}>{type.name}</option>)}
+
           </select>
         </div>
 

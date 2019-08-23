@@ -33,10 +33,11 @@ class App extends Component {
     })
   }
 
-  addHarvests=(data)=>{
+
+  addHarvests =(data)=>{
     axios.post(urlPrefix + '/harvests',data)
     .then(res => {
-      this.getHarvests();// Kiko, this is after addProject then reflesh, and reload getProjects
+      this.getHarvests();
     }) 
   }
 
@@ -89,6 +90,7 @@ class App extends Component {
               var harvestProps = {
                 ...harvest,
                 key: harvest.id,
+                deleteHarvests:this.deleteHarvests
               };
               return (<Harvest {...harvestProps} />)
             })

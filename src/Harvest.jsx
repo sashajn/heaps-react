@@ -3,6 +3,12 @@ import './App.css';
 
 class Harvest extends Component {
 
+    handleDeleteHarvestClick =() =>{
+        var {id, deleteHarvests} =this.props;
+        deleteHarvests(id);
+
+    }
+
     render(){
 
         var {name,description} = this.props;
@@ -16,7 +22,7 @@ class Harvest extends Component {
                 <p>
                     <i className="fas fa-heart"></i>
                     <i className="fas fa-edit"></i>
-                    <i className="fas fa-trash"></i>
+                    <i className="fas fa-trash" onClick={this.handleDeleteHarvestClick}></i>
                 </p>          
                 </div>
             </div> 

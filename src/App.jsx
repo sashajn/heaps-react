@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Harvest from './Harvest.jsx';
 import View from './View.jsx';
+import EditHarvestForm from './EditHarvestForm.jsx';
 import AddHarvestForm from './AddHarvestForm.jsx'
 import axios from 'axios';
 import './App.css';
@@ -20,6 +21,7 @@ class App extends Component {
       ],
       types:[],
       currentType:null,
+      harvestToUpdate:null,
 
     }
   }
@@ -38,6 +40,13 @@ class App extends Component {
     ;
   }
 
+  setHarvestToUpdate = (id) =>
+  {
+    var foundHarvest = this.state.harvests.find((harvest) => {
+      return harvest.id === id;
+    })
+    this.setState({harvestToUpdate:foundHarvest});
+  }
   getHarvests = () => {
     axios.get(urlPrefix+'/harvests')
     .then(res => {
@@ -79,6 +88,14 @@ class App extends Component {
   componentDidMount(){
     this.getHarvests ();
     this.getTypes();
+  }
+  
+  updateHarvests =(id,data)=>{
+    axios.put(urlPrefix + '/harvests/' + id,data)
+    .then(res =>{
+      this.getHarvests();
+    })
+
   }
 
   handleHarvestTypeClick =(e) =>{
@@ -126,6 +143,8 @@ class App extends Component {
               var harvestProps = {
                 ...harvest,
                 key: harvest.id,
+                setActiveView:this.setActiveView,
+                setHarvestToUpdate:this.setHarvestToUpdate,
                 deleteHarvests:this.deleteHarvests
               };
               return (<Harvest {...harvestProps} />)
@@ -157,40 +176,8 @@ class App extends Component {
         <div className="main">
           <h3>Edit harvest</h3>
 
-          <form>
-            <div className="form-group">
-              <label or="name-input">Name</label>
-              <input type="text" className="form-control" name="name-input" id="name-input" placeholder="Enter harvest name"/>
-            </div>
-            <div className="form-group">
-              <label or="name-input">Description</label>
-              <input type="text" className="form-control" name="description-input" id="description-input" placeholder="Enter harvest description"/>
-            </div>
-  
-            <div className="form-group">
-              <label or="name-input">Location/Pick up</label>
-              <input type="text" className="form-control" name="description-input" id="description-input" placeholder="Enter pick up location"/>
-            </div>
-            
-            <div className="form-group">
-              <label or="name-input">Photo</label>
-              <input type="text" className="form-control" name="photo-input" id="photo-input" value="harvest.jpg"/>
-            </div>
-  
-            <div className="form-group">
-              <label for="type-input">Type</label>
-              <select className="form-control" name="type-input" id="type-input">
-                <option value="1">Fruit</option>
-                <option value="2">Veges</option>
-                <option value="3">Herbs</option>
-                <option value="4">Flowers</option>
-                <option value="5">Misc</option>
-              </select>
-            </div>
-  
-            <button type="submit" className="btn btn-primary">Add</button>
-          </form>
-            
+          <EditHarvestForm {...this.state.harvestToUpdate}
+          updateHarvests={this.updateHarvests} setActiveView={this.setActiveView}/>
         </div>
       </View>
 

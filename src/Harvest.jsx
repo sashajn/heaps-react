@@ -3,6 +3,12 @@ import './App.css';
 
 class Harvest extends Component {
 
+    handleUpdateHarvestClick =(e)=>
+    {
+        var {setActiveView,setHarvestToUpdate,id} = this.props;
+        setHarvestToUpdate(id);
+        setActiveView('edit-harvest');
+    }
     handleDeleteHarvestClick =() =>{
         var {id, deleteHarvests} =this.props;
         deleteHarvests(id);
@@ -21,7 +27,7 @@ class Harvest extends Component {
                 <p className="card-text">{description}</p>
                 <p>
                     <i className="fas fa-heart"></i>
-                    <i className="fas fa-edit"></i>
+                    <i className="fas fa-edit" onClick={this.handleUpdateHarvestClick}></i>
                     <i className="fas fa-trash" onClick={this.handleDeleteHarvestClick}></i>
                 </p>          
                 </div>

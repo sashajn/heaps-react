@@ -6,25 +6,35 @@ import './App.css';
      {
          super(props);
      }
-     handelFormSubmit = (e) =>
-    {
-        e.preventDefault();
-        
-        var formData = new FormData(this.form);//FormData() is part of dom we get all data from form
-        var data = {
-            name:formData.get('name-input'),
-            description:formData.get('description-input'),
-            type_id:formData.get('type-input'),
-        }
-        var {updateHarvests,id,setActiveView} = this.props;
-        updateHarvests(id,data);
-        setActiveView('harvests');
-    }
+     handleFormSubmit = (e) =>
+      {
+          e.preventDefault();
+          
+          var formData = new FormData(this.form);//FormData() is part of dom we get all data from form
+
+          var {updateHarvests,id,setActiveView, uploadFile} = this.props;
+          
+          uploadFile(formData).then(res => {
+            var fileName = res.data;
+      
+            var data = {
+              name:formData.get('name-input'),
+              description:formData.get('description-input'),
+              location:formData.get('location-input'),
+              photo: fileName,
+              type_id:formData.get('type-input')
+            }
+            updateHarvests(id,data);
+            setActiveView('harvests')
+      
+          })
+          
+      }
      render()
      {
         var {name,description, types, type_id} = this.props;
          return(
-            <form onSubmit={this.handelFormSubmit} 
+            <form onSubmit={this.handleFormSubmit} 
             ref={(el) =>{this.form = el}}>
             <div className="form-group">
               <label or="name-input">Name</label>
@@ -37,7 +47,12 @@ import './App.css';
   
             <div className="form-group">
               <label or="name-input">Location/Pick up</label>
-              <input type="text" className="form-control" name="description-input" id="description-input" placeholder="Enter pick up location"/>
+              <input type="text" className="form-control" name="location-input" id="location-input" placeholder="Enter pick up location"/>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="name-input">Photo</label>
+              <input type="file" className="form-control" name="photo-input" id="photo-input"/>
             </div>            
   
             <div className="form-group">

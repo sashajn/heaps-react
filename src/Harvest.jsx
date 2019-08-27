@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import './App.css';
 
+var serverUrl = 'http://10.2.24.43:4001/';
+
 class Harvest extends Component {
 
     handleUpdateHarvestClick =(e)=>
@@ -17,10 +19,10 @@ class Harvest extends Component {
 
     render(){
 
-        var {name,description,location,type} = this.props;
+        var {name,description,location,type,photo} = this.props;
         return(
             <div className="card harvest">
-                <img className="card-img-top" src={type?type.photo:'plant.jpg'} alt="Card image cap" />
+                <img className="card-img-top" src={serverUrl+photo} alt="Card image cap" />
                 <div className="card-body">
                 <h5 className="card-title">{name}</h5>
                 <h4 className="card-location">{location}</h4>

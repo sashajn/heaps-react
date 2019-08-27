@@ -6,7 +6,7 @@ import AddHarvestForm from './AddHarvestForm.jsx'
 import axios from 'axios';
 import './App.css';
 
-var urlPrefix = 'http://10.2.24.38:4001/api'
+var urlPrefix = 'http://10.2.24.43:4001/api'
 
 class App extends Component {
   constructor(props){
@@ -106,6 +106,15 @@ class App extends Component {
     this.setActiveView('harvests');
 
   }
+
+
+  uploadFile = (formData) => {
+
+    // you get back a promis - show you later
+    var settings = { headers: {'Content-Type': 'multipart/form-data' }}
+    return axios.post(urlPrefix+'/upload',formData,settings)
+
+  }
   
 
 
@@ -164,7 +173,7 @@ class App extends Component {
         <div className="main">
           <h3>Add a harvest</h3>
 
-          <AddHarvestForm addHarvests={this.addHarvests} types={this.state.types} setActiveView={this.setActiveView}/>
+          <AddHarvestForm uploadFile={this.uploadFile} addHarvests={this.addHarvests} types={this.state.types} setActiveView={this.setActiveView}/>
 
         </div>
       </View>
@@ -178,7 +187,7 @@ class App extends Component {
           <h3>Edit harvest</h3>
 
           <EditHarvestForm {...this.state.harvestToUpdate} types={this.state.types}
-          updateHarvests={this.updateHarvests} setActiveView={this.setActiveView}/>
+          updateHarvests={this.updateHarvests} setActiveView={this.setActiveView} uploadFile={this.uploadFile}/>
         </div>
       </View>
 

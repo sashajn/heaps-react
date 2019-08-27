@@ -2,19 +2,31 @@ import React, {Component} from 'react';
 import { types } from '@babel/core';
 
 class  AddHarvestForm extends Component {
-    handleFormSubmit = (e) => {
-      e.preventDefault();
-      var formData = new FormData(this.form);
-      var data = {
-        name: formData.get('name-input'),
-        description:  formData.get('description-input'),
-        location: formData.get('location-input'),
-        type_id:  formData.get('type-input')
-      }
-      console.log(data);
-      this.props.addHarvests(data);
-      this.props.setActiveView('harvests');
-    }
+
+  handleFormSubmit = (e) => {
+		e.preventDefault();
+
+		var {uploadFile,addHarvests,setActiveView} = this.props;
+
+		var formData = new FormData(this.form);
+
+		uploadFile(formData).then(res => {
+			var fileName = res.data;
+
+			var data = {
+				name:formData.get('name-input'),
+        description:formData.get('description-input'),
+        location:formData.get('location-input'),
+				photo: fileName,
+				type_id:formData.get('type-input')
+			}
+			addHarvests(data)
+			setActiveView('harvests')
+
+		})
+
+  } 
+  
     render(){
       var {types} = this.props;
       return (
@@ -32,6 +44,11 @@ class  AddHarvestForm extends Component {
           <label htmlFor="name-input">Location/Pick up</label>
           <input type="text" className="form-control" name="location-input" id="location-input" placeholder="Enter pick up location"/>
         </div>
+
+        <div className="form-group">
+	          <label htmlFor="name-input">Photo</label>
+	          <input type="file" className="form-control" name="photo-input" id="photo-input"/>
+	        </div>
 
         <div className="form-group">
           <label htmlFor="type-input">Type</label>
